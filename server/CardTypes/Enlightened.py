@@ -25,7 +25,7 @@ class Englightened(Card):
         ccw_distance = None
         for i in range(deck_size):
             idx = (self.positionIndex - i) % deck_size
-            if self.deck[idx].getType() == "evil":
+            if self.deck[idx].isEvil():
                 ccw_distance = i
                 break
 

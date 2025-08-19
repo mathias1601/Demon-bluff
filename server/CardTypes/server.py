@@ -5,6 +5,7 @@ from Confessor import Confessor
 from Knight import Knight
 from Gemcrafter import Gemcrafter
 from Judge import Judge
+from Minion import Minion
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
@@ -28,12 +29,15 @@ app.add_middleware(
 
 @app.post("/create-deck")
 def create_preset_deck1():
+
+    evil1 = Confessor(2, None, False, False, False, True)
+    evil2 = Gemcrafter(3, None, False, False, True, False)
     
     preset_deck1 = [
         Knight(0, None, True, False, False, False),
         FortuneTeller(1, None, True, False, False, False),
-        Confessor(2, None, False, False, False, True),
-        Gemcrafter(3, None, False, False, True, False),
+        Minion(evil1),
+        Minion(evil2),
         Judge(4, None, True, False, False, False),
         Judge(5, None, True, False, False, False),
         Gemcrafter(6, None, True, False, False, False),
@@ -41,18 +45,29 @@ def create_preset_deck1():
 
     # Assign the deck reference to all cards
     for card in preset_deck1:
-        card.deck = preset_deck1
+        card.assignDeck(preset_deck1)
 
     global active_deck
     active_deck = preset_deck1
 
-    return { "deck": [
+    evilCount = 0
+
+    for card in active_deck:
+        if card.isEvil():
+            evilCount += 1
+
+    return { 
+        "evilCount": evilCount,
+        "deck": [
         {
-            "positionIndex": card.positionIndex,
-            "name": card.name,
+            "positionIndex": card.getPositionIndex(),
+            "name": card.getName(),
             "reveal": card.reveal(),
             "usage": card.getUsage(),
+            "usageResult": None,
             "isRevealed": False,
+            "isEvil": card.isEvil(),
+            "executeEffect": card.execute()
         }
         for card in preset_deck1
     ]}
@@ -71,4 +86,4 @@ def use_card(request: UseCardRequest):
 
     # Call the card's `use` method dynamically with *args
     result = card.use(*request.targets)
-    return {"result": result}
+    return {"usageResult": result}

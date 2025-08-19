@@ -1,53 +1,58 @@
 'use client'
 import React, { useState } from 'react'
+import "../styles/card.css"
 
 interface Props {
 	positionIndex: number,
 	name: string,
 	reveal: string,
 	usage: number,
+	usageResult: string | null,
 	isRevealed: boolean,
 	x: number,
 	y: number,
 	isSelected: boolean,
+	isExecuted: boolean,
 }
 
-const Card = ({ positionIndex, name, reveal, usage, isRevealed, x, y, isSelected }: Props) => {
-
+const Card = ({ positionIndex, name, reveal, usage, usageResult, isRevealed, x, y, isSelected, isExecuted }: Props) => {
+	
 	return (
 		<div>
 			<div
+				className={`card-container ${isRevealed ? "flipped" : ""}`}
 				style={{
 					position: "absolute",
 					left: `${x}px`,
 					top: `${y}px`,
-					width: "200px",
-					height: "300px",
-					backgroundColor: "#fff",
-					borderRadius: "8px",
-					display: "flex",
-					alignItems: "center",
-					justifyContent: "center",
-					transform: "translate(-50%, -50%)",
-					boxShadow: "0 2px 6px rgba(0,0,0,0.2)",
-					border: isSelected ? "3px solid green" : "1px solid black",
 					cursor: "pointer",
 				}}
-			>
-				{isRevealed
-					?
-					<div>
-						<div>
-							<div>#{positionIndex}</div>
-							{name}
-						</div>
-						<div>
-							{reveal}
-						</div>
-					</div>
-					:
-					null
-				}
+			>	
+			<div className='card'>
+				<div 
+					style={{
+						border: isSelected ? "3px solid red" : "2px solid #333",
+						background: isExecuted ? "red" : "#444"
+					}} 
+					className="card-front"
+				>
+          #{positionIndex}
+        </div>
+        <div 
+					style={
+						{
+							border: isSelected ? "3px solid red" : "2px solid #333",
+							background: isExecuted ? "red" : "#fafafa",
+						}} 
+					className="card-back"
+				>
+					<h3>#{positionIndex}</h3>
+          <h3>{name}</h3>
+          {reveal && <p>{reveal}</p>}
+					{usageResult && <p>{usageResult}</p>}
+          {usage > 0 && <p>!</p>}
+        </div>
+			</div>
 			</div>
 		</div>
 	)

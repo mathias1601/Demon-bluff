@@ -16,7 +16,7 @@ class Gemcrafter(Card):
         evilList = []
         
         for card in self.deck:
-            if card.getType() == "evil":
+            if card.isEvil():
                 evilList.append(card)
             else:
                 villagerList.append(card)
@@ -26,7 +26,7 @@ class Gemcrafter(Card):
         if self.villager:
             randomCard = random.choice(villagerList)
         else:
-            randomCard = random.choice(villagerList)
+            randomCard = random.choice(evilList)
         
         self.revealed = True
         return f"#{randomCard.getPositionIndex()}, {randomCard.getName()} is good"

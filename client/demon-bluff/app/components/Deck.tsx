@@ -1,5 +1,5 @@
 'use client'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Card from './Card';
 
 type CardType = {
@@ -7,21 +7,34 @@ type CardType = {
 	name: string,
 	reveal: string,
 	usage: number,
+	usageResult: string | null,
 	isRevealed: boolean,
+	isEvil: boolean,
+	executeEffect: number
 }
 
 const Deck = () => {
 	const radius = 500; // distance from center
+
+	const maxHealth = 10;
+	const [currentHealth, setCurrentHealth] = useState<number>(maxHealth);
+	const [evilCount, setEvilCount] = useState<number>(0);
+	const [evilsExecuted, setEvilsExecuted] = useState<number>(0);
 
 	const [currentDeck, setCurrentDeck] = useState<CardType[]>([]);
 	const [deckCreated, setDeckCreated] = useState<boolean>(false);
 	const [error, setError] = useState<any>(null);
 
 	// Selection mode state
-	const [selectMode, setSelectMode] = useState(false);
+	const [selectMode, setSelectMode] = useState<boolean>(false);
 	const [actionCardIndex, setActionCardIndex] = useState<number | null>(null);
 	const [requiredSelections, setRequiredSelections] = useState(0);
 	const [selectedCards, setSelectedCards] = useState<number[]>([]);
+
+	// Execution mode state
+	const [executionMode, setExecutionMode] = useState<boolean>(false);
+	const [executedCards, setExecutedCards] = useState<number[]>([]);
+
 
 	async function createDeck() {
 		setError(null);
@@ -29,8 +42,10 @@ const Deck = () => {
 		try {
 			const res = await fetch('http://localhost:8000/create-deck', { method: 'POST' });
 			const data = await res.json();
+			console.log(data.deck)
 			if (res.ok) {
 				setCurrentDeck(data.deck);
+				setEvilCount(data.evilCount)
 			} else {
 				setError(data.error || 'Failed to create deck');
 			}
@@ -40,30 +55,47 @@ const Deck = () => {
 	}
 
 	const revealCard = (index: number) => {
-		const card = currentDeck[index];
-
-		// If already revealed and has usage → enter selection mode
-		if (card.isRevealed && card.usage > 0) {
-			startSelectMode(index, card.usage);
-			return;
-		}
-
+		
 		// Reveal the card
 		setCurrentDeck(prevDeck =>
-			prevDeck.map((c, i) =>
-				i === index ? { ...c, isRevealed: true } : c
+			prevDeck.map((card, i) =>
+				i === index ? { ...card, isRevealed: true } : card
 			)
 		);
 	};
 
 	const startSelectMode = (cardIndex: number, usage: number) => {
-		setSelectMode(true);
-		setActionCardIndex(cardIndex);
-		setRequiredSelections(usage);
-		setSelectedCards([]);
+		if (usage !== 0) {
+			setSelectMode(true);
+			setActionCardIndex(cardIndex);
+			setRequiredSelections(usage);
+			setSelectedCards([]);
+			setCurrentDeck(prevDeck =>
+				prevDeck.map((card, i) =>
+					i === cardIndex ? { ...card, usage: 0 } : card
+				)
+			);
+		} 
 	};
 
+	const toggleExecution = (index: number) => {
+
+		// Execute evil
+		if (!executedCards.includes(index) && currentDeck[index].executeEffect == -1){
+				setExecutedCards(prev => [...prev, index])
+				setEvilsExecuted(evilsExecuted + 1)
+			}
+
+		// Execute innocent
+		else if (!executedCards.includes(index) && currentDeck[index].executeEffect !== 0) {
+				setExecutedCards(prev => [...prev, index])
+				setCurrentHealth(currentHealth + currentDeck[index].executeEffect)	
+		
+		}
+	}
+
 	const toggleTargetSelection = (index: number) => {
+
 		if (!selectMode) return;
 
 		setSelectedCards(prev => {
@@ -89,6 +121,7 @@ const Deck = () => {
 		setSelectedCards([]);
 	}
 
+
 	async function fetchUseCard(targets: number[], cardIndex: number) {
 		const res = await fetch("http://localhost:8000/use-card", {
 			method: "POST",
@@ -102,14 +135,41 @@ const Deck = () => {
 		}
 
 		const data = await res.json();
-		console.log("Card use result:", data.result);
+		setCurrentDeck(prevDeck =>
+  			prevDeck.map((card, i) =>
+    			i === cardIndex ? { ...card, usageResult: data.usageResult} : card
+  			)
+		);
+		
 	}
+
+	
+
+const handleCardClick = (cardIndex: number) => {
+		const card = currentDeck[cardIndex]
+	
+		if (executionMode) {
+			toggleExecution(cardIndex)
+			revealCard(cardIndex)
+		}
+		else if (selectMode) {
+			toggleTargetSelection(cardIndex)
+		}
+    else if (!card.isRevealed) {	
+      revealCard(cardIndex);
+    }
+		else {
+			startSelectMode(cardIndex, card.usage)
+		}
+};
+
 
 	return (
 		<div>
 			<div style={{ padding: 20 }}>
 				<h1>Game Deck</h1>
-
+				<p>Health: {currentHealth}/{maxHealth}</p>
+				<p>Evils executed: {evilsExecuted}/{evilCount}</p>
 				{!deckCreated ? (
 					<button onClick={createDeck}>Create Deck</button>
 				) : (
@@ -134,6 +194,23 @@ const Deck = () => {
 						</button>
 					</div>
 				)}
+				
+				<div>
+					<button onClick={() => {setExecutionMode(!executionMode); setSelectMode(false)}} >Execute</button>
+					{executionMode && (
+						<div style={{ marginTop: "10px", color: "blue" }}>
+							Selecting target to execute
+							<button
+								style={{ marginLeft: "10px" }}
+								onClick={() => {
+									setExecutionMode(false);
+								}}
+							>
+								Cancel
+							</button>
+						</div>
+					)}
+				</div>
 			</div>
 
 			<div
@@ -152,11 +229,7 @@ const Deck = () => {
 					return (
 						<div
 							key={card.positionIndex}
-							onClick={() =>
-								selectMode
-									? toggleTargetSelection(card.positionIndex)
-									: revealCard(card.positionIndex)
-							}
+							onClick={() => handleCardClick(card.positionIndex)}
 						>
 							<Card
 								positionIndex={card.positionIndex}
@@ -166,8 +239,10 @@ const Deck = () => {
 								isRevealed={card.isRevealed}
 								x={x}
 								y={y}
+								usageResult={card.usageResult}
 								isSelected={selectedCards.includes(card.positionIndex)}
-							/>
+								isExecuted={executedCards.includes(card.positionIndex)} 								/>
+		
 						</div>
 					);
 				})}

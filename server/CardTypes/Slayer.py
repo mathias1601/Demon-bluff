@@ -15,7 +15,7 @@ class Slayer(Card):
 
         if self.villager:
 
-            if self.deck[position].getType() == "evil":
+            if self.deck[position].isEvil():
                 self.deck[position].execute()
                 return f"I slayed #{position}"
 

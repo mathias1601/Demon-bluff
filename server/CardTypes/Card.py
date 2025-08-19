@@ -11,11 +11,11 @@ class Card():
 
         self.revealed = False
 
-    def getType(self):
-        if self.demon:
-            return "evil"
-        if self.minion:
-            return "evil"
+    def isEvil(self):
+        if self.demon or self.minion:
+            return True
+        
+        return False
     
     def getPositionIndex(self):
         return self.positionIndex
@@ -25,11 +25,13 @@ class Card():
         
     def execute(self):
 
-        if self.getType() == "evil":
-            return 0
+        if self.isEvil():
+            return -1
         else:
             return -5
     
+    def assignDeck(self, deck):
+        self.deck = deck
 
     """ Usage is meant to show if a card has a use-function. 
     If not it returns 0, it it does it returns the amount of indexes it should get """

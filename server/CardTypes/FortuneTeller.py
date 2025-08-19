@@ -13,15 +13,15 @@ class FortuneTeller(Card):
     def use(self, position1, position2):
         
         if self.villager:
-            if self.deck[position1].getType() == "evil" or self.deck[position2].getType() == "evil":
-                return f"Is {position1} or {position2} evil?: True"
+            if self.deck[position1].isEvil() or self.deck[position2].isEvil():
+                return f"Is #{position1} or #{position2} evil?: True"
             else:
-                return f"Is {position1} or {position2} evil?: False"
+                return f"Is #{position1} or #{position2} evil?: False"
         else:
-            if self.deck[position1].getType() == "evil" or self.deck[position2].getType() == "evil":
-                return f"Is {position1} or {position2} evil?: False"
+            if self.deck[position1].isEvil() or self.deck[position2].isEvil():
+                return f"Is #{position1} or #{position2} evil?: False"
             else:
-                return f"Is {position1} or {position2} evil?: True"
+                return f"Is #{position1} or #{position2} evil?: True"
             
     def getUsage(self):
         return 2

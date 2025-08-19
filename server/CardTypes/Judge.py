@@ -13,7 +13,7 @@ class Judge(Card):
 
         if self.villager:
 
-            if self.deck[position].getType() == "evil":
+            if self.deck[position].isEvil():
                 return f"#{position} is lying"
             else:
                 return f"#{position} is telling the truth"

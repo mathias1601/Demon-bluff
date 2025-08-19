@@ -16,7 +16,7 @@ class Hunter(Card):
 
         for i in range(deck_size):
             idx = (startIndex + i) % deck_size  # wrap around
-            if self.deck[idx].getType() == "evil":
+            if self.deck[idx].isEvil():
                 minDistance = i
                 break
 
