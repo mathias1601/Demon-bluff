@@ -1,11 +1,11 @@
 class Card():
 
-    def __init__(self, positionIndex, deck, isVillager, isOutcast, isMinion, isDemon):
+    def __init__(self, positionIndex, deck, isVillager, isCorrupted, isMinion, isDemon):
 
         self.positionIndex = positionIndex
         self.deck = deck
         self.villager = isVillager
-        self.outcast = isOutcast
+        self.corrupted = isCorrupted
         self.minion = isMinion
         self.demon = isDemon
 
@@ -16,6 +16,9 @@ class Card():
             return True
         
         return False
+    
+    def isCorrupted(self):
+        return self.corrupted
     
     def getPositionIndex(self):
         return self.positionIndex
@@ -37,6 +40,9 @@ class Card():
     If not it returns 0, it it does it returns the amount of indexes it should get """
     def getUsage(self):
         return 0
+    
+    def gameStart(self):
+        return 
     
         
         

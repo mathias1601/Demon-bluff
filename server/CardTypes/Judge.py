@@ -11,7 +11,7 @@ class Judge(Card):
 
     def use(self, position):
 
-        if self.villager:
+        if self.isEvil() == False and self.isCorrupted() == False:
 
             if self.deck[position].isEvil():
                 return f"#{position} is lying"

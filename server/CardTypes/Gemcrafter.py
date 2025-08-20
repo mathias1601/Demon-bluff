@@ -23,12 +23,11 @@ class Gemcrafter(Card):
 
         randomCard = None
 
-        if self.villager:
+        if self.isEvil() == False and self.isCorrupted() == False:
             randomCard = random.choice(villagerList)
         else:
             randomCard = random.choice(evilList)
         
-        self.revealed = True
         return f"#{randomCard.getPositionIndex()}, {randomCard.getName()} is good"
     
             

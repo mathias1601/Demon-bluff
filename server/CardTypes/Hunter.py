@@ -11,35 +11,34 @@ class Hunter(Card):
         return self.name
     
     def getClosestEvil(self, startIndex):
-        deck_size = len(self.deck)
-        minDistance = None
+    
+        for i in range(len(self.deck)):
+            left = startIndex - i
+            right = startIndex + i
 
-        for i in range(deck_size):
-            idx = (startIndex + i) % deck_size  # wrap around
-            if self.deck[idx].isEvil():
-                minDistance = i
-                break
+            if left >= 0 and self.deck[left].isEvil():
+                return i
+            if right < len(self.deck) and self.deck[right].isEvil():
+                return i
 
-        return minDistance
+    def reveal(self):
+        closest_distance = self.getClosestEvil(self.positionIndex)
 
-def reveal(self):
-    closest_distance = self.getClosestEvil(self.positionIndex)
+        self.revealed = True
 
-    self.revealed = True
-
-    if self.villager:
-        return f"I am {closest_distance} away from closest Evil"
-    else:
-        # Calculate largest possible distance in circular deck
-        if len(self.deck) % 2 == 0:
-            largest_distance = len(self.deck) // 2
+        if self.isEvil() == False and self.isCorrupted() == False:
+            return f"I am {closest_distance} cards away from closest Evil"
         else:
-            largest_distance = (len(self.deck) - 1) // 2
+            # Calculate largest possible distance in circular deck
+            if len(self.deck) % 2 == 0:
+                largest_distance = len(self.deck) // 2
+            else:
+                largest_distance = (len(self.deck) - 1) // 2
 
-        # Pick a random distance not equal to the closest
-        random_distance = random.randint(1, largest_distance)
-        while random_distance == closest_distance:
+            # Pick a random distance not equal to the closest
             random_distance = random.randint(1, largest_distance)
+            while random_distance == closest_distance:
+                random_distance = random.randint(1, largest_distance)
 
-        return f"I am {random_distance} away from closest Evil"
+            return f"I am {random_distance} away from closest Evil"
 

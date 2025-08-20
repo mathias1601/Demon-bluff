@@ -7,6 +7,9 @@ class Minion():
     def getName(self):
         return self.disguise.name
     
+    def getEvilName(self):
+        return self.name
+    
     def isEvil(self):
         return self.disguise.isEvil()
     
@@ -26,3 +29,6 @@ class Minion():
     If not it returns 0, it it does it returns the amount of indexes it should get """
     def getUsage(self):
         return self.disguise.getUsage()
+    
+    def gameStart(self):
+        return

@@ -3,18 +3,16 @@ import random
 
 class Confessor(Card):
 
-    def __init__(self, positionIndex, deck, isVillager, isOutcast, isMinion, isDemon):
+    def __init__(self, positionIndex, deck, isVillager, isCorrupted, isMinion, isDemon):
         self.name = "Confessor"
-        super().__init__(positionIndex, deck, isVillager, isOutcast, isMinion, isDemon)
+        super().__init__(positionIndex, deck, isVillager, isCorrupted, isMinion, isDemon)
 
     def getName(self):
         return self.name
 
     def reveal(self):
 
-        self.revealed = True
-
-        if self.villager:
-            return "I am good"
-        else:
+        if self.isEvil() or self.corrupted:
             return "I am dizzy"
+        else:
+            return "I am good"

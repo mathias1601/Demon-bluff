@@ -13,7 +13,7 @@ class Slayer(Card):
     def use(self, position):
     
 
-        if self.villager:
+        if self.isEvil() == False and self.isCorrupted() == False:
 
             if self.deck[position].isEvil():
                 self.deck[position].execute()

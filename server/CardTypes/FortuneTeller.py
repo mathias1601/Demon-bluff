@@ -12,7 +12,7 @@ class FortuneTeller(Card):
 
     def use(self, position1, position2):
         
-        if self.villager:
+        if self.isEvil() == False and self.isCorrupted() == False:
             if self.deck[position1].isEvil() or self.deck[position2].isEvil():
                 return f"Is #{position1} or #{position2} evil?: True"
             else:

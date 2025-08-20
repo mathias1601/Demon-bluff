@@ -4,7 +4,13 @@ from FortuneTeller import FortuneTeller
 from Confessor import Confessor
 from Knight import Knight
 from Gemcrafter import Gemcrafter
+from Bombardier import Bombardier
+from Scout import Scout
+from Oracle import Oracle
+from Hunter import Hunter
 from Judge import Judge
+from Jester import Jester
+from PlagueDoctor import PlaugeDoctor
 from Minion import Minion
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
@@ -30,17 +36,17 @@ app.add_middleware(
 @app.post("/create-deck")
 def create_preset_deck1():
 
-    evil1 = Confessor(2, None, False, False, False, True)
-    evil2 = Gemcrafter(3, None, False, False, True, False)
+    evil1 = Hunter(6, None, False, False, False, True)
+    evil2 = Bombardier(1, None, False, False, False, True)
     
     preset_deck1 = [
-        Knight(0, None, True, False, False, False),
-        FortuneTeller(1, None, True, False, False, False),
-        Minion(evil1),
+        Gemcrafter(0, None, True, False, False, False),
         Minion(evil2),
-        Judge(4, None, True, False, False, False),
-        Judge(5, None, True, False, False, False),
-        Gemcrafter(6, None, True, False, False, False),
+        Oracle(2, None, True, False, False, False),
+        Jester(3, None, True, False, False, False),
+        Scout(4, None, True, False, False, False),
+        PlaugeDoctor(5, None, True, False, False, False),
+        Minion(evil1),
     ]
 
     # Assign the deck reference to all cards
@@ -52,7 +58,10 @@ def create_preset_deck1():
 
     evilCount = 0
 
+    """ Activate all start of game effects and count total evils """
+
     for card in active_deck:
+        card.gameStart()
         if card.isEvil():
             evilCount += 1
 

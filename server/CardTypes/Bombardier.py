@@ -1,20 +1,16 @@
 from Card import Card
-import random
 
-class Knight(Card):
+class Bombardier(Card):
 
     def __init__(self, positionIndex, deck, isVillager, isOutcast, isMinion, isDemon):
-        self.name = "Knight"
+        self.name = "Bombardier"
         super().__init__(positionIndex, deck, isVillager, isOutcast, isMinion, isDemon)
 
     def getName(self):
         return self.name
-
+    
     def execute(self):
         if self.isEvil() == False:
-            return 0
-        elif self.isCorrupted() == False:
-            return -8
+            return -10
         else:
-            return -1
-        
+            return -1 
