@@ -1,19 +1,8 @@
 from typing import List
 from pydantic import BaseModel
-from FortuneTeller import FortuneTeller
-from Confessor import Confessor
-from Knight import Knight
-from Gemcrafter import Gemcrafter
-from Bombardier import Bombardier
-from Scout import Scout
-from Oracle import Oracle
-from Hunter import Hunter
-from Judge import Judge
-from Jester import Jester
-from PlagueDoctor import PlaugeDoctor
-from Minion import Minion
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
+from preset_decks import all_preset_decks
 
 
 app = FastAPI()
@@ -21,40 +10,30 @@ active_deck = None
 
 
 origins = [
-    "http://localhost:3000",  # your React/Next.js frontend URL
-    # you can add more allowed origins here
+    "http://localhost:3000", 
 ]
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=origins,  # allows these origins to access your API
+    allow_origins=origins, 
     allow_credentials=True,
-    allow_methods=["GET", "POST", "OPTIONS"],    # allow all HTTP methods (GET, POST, etc.)
-    allow_headers=["*"],    # allow all headers
+    allow_methods=["GET", "POST", "OPTIONS"],    
+    allow_headers=["*"],    
 )
 
-@app.post("/create-deck")
-def create_preset_deck1():
-
-    evil1 = Hunter(6, None, False, False, False, True)
-    evil2 = Bombardier(1, None, False, False, False, True)
-    
-    preset_deck1 = [
-        Gemcrafter(0, None, True, False, False, False),
-        Minion(evil2),
-        Oracle(2, None, True, False, False, False),
-        Jester(3, None, True, False, False, False),
-        Scout(4, None, True, False, False, False),
-        PlaugeDoctor(5, None, True, False, False, False),
-        Minion(evil1),
-    ]
-
-    # Assign the deck reference to all cards
-    for card in preset_deck1:
-        card.assignDeck(preset_deck1)
+@app.post("/create-deck/{index}")
+def create_preset_deck(index: int):
 
     global active_deck
-    active_deck = preset_deck1
+
+    if index > len(all_preset_decks):
+        raise HTTPException(
+            status_code=400,
+            detail=f"Index {index} is too large. Maximum allowed index is {len(all_preset_decks)}."
+        )
+
+
+    active_deck = all_preset_decks[index]
 
     evilCount = 0
 
@@ -78,7 +57,7 @@ def create_preset_deck1():
             "isEvil": card.isEvil(),
             "executeEffect": card.execute()
         }
-        for card in preset_deck1
+        for card in active_deck
     ]}
 
 

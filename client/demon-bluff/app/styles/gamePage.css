@@ -1,0 +1,16 @@
+.levelContainer {
+    border: solid 1px black;
+    font-size: 30px;
+    display: flex;
+}
+
+.levelContainer:hover {
+    background-color: black;
+    color: white;
+    cursor: pointer;
+}
+
+
+.column {
+    font-size: 30px;
+}

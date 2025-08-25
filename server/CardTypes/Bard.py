@@ -1,22 +1,22 @@
 from Card import Card
 import random
 
-class Scout(Card):
+class Bard(Card):
 
     def __init__(self, positionIndex, deck, isVillager, isOutcast, isMinion, isDemon):
-        self.name = "Scout"
+        self.name = "Bard"
         super().__init__(positionIndex, deck, isVillager, isOutcast, isMinion, isDemon)
 
     def getName(self):
         return self.name
     
-    def getClosestEvil(self, startIndex):
+    def getClosestCorrupted(self, startIndex):
         deck_size = len(self.deck)
 
         minDistanceClockwise = 0
         currentIndex = startIndex
 
-        while self.deck[currentIndex].isEvil() == False or currentIndex == startIndex:
+        while self.deck[currentIndex].isCorrupted() == False or currentIndex == startIndex:
             minDistanceClockwise += 1
             currentIndex += 1
             if currentIndex >= deck_size:
@@ -27,7 +27,7 @@ class Scout(Card):
         minDistanceCounterClockwise = 0
         currentIndex = startIndex
 
-        while self.deck[currentIndex].isEvil() == False or currentIndex == startIndex:
+        while self.deck[currentIndex].isCorrupted() == False or currentIndex == startIndex:
             minDistanceCounterClockwise += 1
             currentIndex -= 1
 
@@ -39,17 +39,12 @@ class Scout(Card):
 
     def reveal(self):
 
-        currentEvils = []
-        for i in range(len(self.deck)):
-            if self.deck[i].isEvil():
-                currentEvils.append(i)
+        closest_distance = self.getClosestCorrupted(self.positionIndex)
 
-        randomEvilIndex = random.choice(currentEvils)
-        closestEvilDistance = self.getClosestEvil(randomEvilIndex) 
+        self.revealed = True
 
         if self.isEvil() == False and self.isCorrupted() == False:
-            return f"{self.deck[randomEvilIndex].getEvilName()} is {closestEvilDistance} cards away from closest evil"
-        
+            return f"I am {closest_distance} cards away from closest Corrupted"
         else:
             # Calculate largest possible distance in circular deck
             if len(self.deck) % 2 == 0:
@@ -59,9 +54,7 @@ class Scout(Card):
 
             # Pick a random distance not equal to the closest
             random_distance = random.randint(1, largest_distance)
-            while random_distance == closestEvilDistance:
+            while random_distance == closest_distance:
                 random_distance = random.randint(1, largest_distance)
 
-            return f"{self.deck[randomEvilIndex].getEvilName()} is {random_distance} cards away from closest evil"
-
-            
+            return f"I am {random_distance} away from closest Corrupted"

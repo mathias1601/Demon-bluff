@@ -1,0 +1,103 @@
+.backButton {
+    border: solid 3px black;
+    border-radius: 30px;
+    padding: 5px;
+    font-size: 20px;
+    width: 60px;
+}
+
+.backButton::before {
+    content: "←";
+    margin-right: 8px;
+}
+
+.backButton:hover {
+    background-color: black;
+    color: white;
+    cursor: pointer;
+}
+
+.executeButton {
+    border: solid 3px black;
+    border-radius: 30px;
+    padding: 5px;
+    font-size: 20px;
+}
+
+.executeButton:hover {
+    background-color: black;
+    color: white;
+    cursor: pointer;
+}
+
+
+.heart {
+    width: 120px;
+    height: 110px;
+    margin: 50px;
+    background-color: red;
+    transform: rotate(-45deg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1;
+}
+
+.heart::before,
+.heart::after {
+    content: "";
+    position: absolute;
+    width: 120px;
+    height: 110px;
+    background-color: red;
+    border-radius: 50%;
+    z-index: 0;
+    /* Push lobes behind text */
+}
+
+.heart::before {
+    top: -60px;
+    left: 0;
+}
+
+.heart::after {
+    left: 60px;
+    top: 0;
+}
+
+.heart-text {
+    transform: rotate(45deg);
+    /* Unrotate the text */
+    z-index: 1;
+    color: white;
+    font-weight: bold;
+    font-family: sans-serif;
+    text-align: center;
+    padding: 5px;
+}
+
+
+/* Heart health variations */
+.heart.level-1,
+.heart.level-1::before,
+.heart.level-1::after {
+    background-color: #1a0000;
+}
+
+.heart.level-2,
+.heart.level-2::before,
+.heart.level-2::after {
+    background-color: #900000;
+}
+
+.heart.level-3,
+.heart.level-3::before,
+.heart.level-3::after {
+    background-color: #aa0000;
+}
+
+.heart.level-4,
+.heart.level-4::before,
+.heart.level-4::after {
+    background-color: #ff0000;
+}

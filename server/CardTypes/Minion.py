@@ -1,4 +1,6 @@
-class Minion():
+from Card import Card
+
+class Minion(Card):
     """ The disguise parameter is meant to be a good villager class """
     def __init__(self, disguise):
         self.name = "Minion"
@@ -32,3 +34,6 @@ class Minion():
     
     def gameStart(self):
         return
+    
+    def isCorrupted(self):
+        return False

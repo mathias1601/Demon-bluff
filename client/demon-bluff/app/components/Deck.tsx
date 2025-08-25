@@ -1,6 +1,10 @@
 'use client'
 import React, { useEffect, useState } from 'react'
 import Card from './Card';
+import '../styles/deck.css'
+import { faSkull } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+
 
 type CardType = {
 	positionIndex: number,
@@ -13,7 +17,12 @@ type CardType = {
 	executeEffect: number
 }
 
-const Deck = () => {
+interface Props {
+	level: number
+	quit: () => void
+}
+
+const Deck = ({ level, quit }: Props) => {
 	const radius = 500; // distance from center
 
 	const maxHealth = 10;
@@ -36,11 +45,15 @@ const Deck = () => {
 	const [executedCards, setExecutedCards] = useState<number[]>([]);
 
 
+	useEffect(() => {
+		createDeck()
+	}, [])
+
 	async function createDeck() {
 		setError(null);
 		setDeckCreated(true);
 		try {
-			const res = await fetch('http://localhost:8000/create-deck', { method: 'POST' });
+			const res = await fetch(`http://localhost:8000/create-deck/${level}`, { method: 'POST' });
 			const data = await res.json();
 			console.log(data.deck)
 			if (res.ok) {
@@ -55,7 +68,7 @@ const Deck = () => {
 	}
 
 	const revealCard = (index: number) => {
-		
+
 		// Reveal the card
 		setCurrentDeck(prevDeck =>
 			prevDeck.map((card, i) =>
@@ -75,22 +88,22 @@ const Deck = () => {
 					i === cardIndex ? { ...card, usage: 0 } : card
 				)
 			);
-		} 
+		}
 	};
 
 	const toggleExecution = (index: number) => {
 
 		// Execute evil
-		if (!executedCards.includes(index) && currentDeck[index].executeEffect == -1){
-				setExecutedCards(prev => [...prev, index])
-				setEvilsExecuted(evilsExecuted + 1)
-			}
+		if (!executedCards.includes(index) && currentDeck[index].executeEffect == -1) {
+			setExecutedCards(prev => [...prev, index])
+			setEvilsExecuted(evilsExecuted + 1)
+		}
 
 		// Execute innocent
 		else if (!executedCards.includes(index) && currentDeck[index].executeEffect !== 0) {
-				setExecutedCards(prev => [...prev, index])
-				setCurrentHealth(currentHealth + currentDeck[index].executeEffect)	
-		
+			setExecutedCards(prev => [...prev, index])
+			setCurrentHealth(currentHealth + currentDeck[index].executeEffect)
+
 		}
 	}
 
@@ -136,18 +149,18 @@ const Deck = () => {
 
 		const data = await res.json();
 		setCurrentDeck(prevDeck =>
-  			prevDeck.map((card, i) =>
-    			i === cardIndex ? { ...card, usageResult: data.usageResult} : card
-  			)
+			prevDeck.map((card, i) =>
+				i === cardIndex ? { ...card, usageResult: data.usageResult } : card
+			)
 		);
-		
+
 	}
 
-	
 
-const handleCardClick = (cardIndex: number) => {
+
+	const handleCardClick = (cardIndex: number) => {
 		const card = currentDeck[cardIndex]
-	
+
 		if (executionMode) {
 			toggleExecution(cardIndex)
 			revealCard(cardIndex)
@@ -155,28 +168,35 @@ const handleCardClick = (cardIndex: number) => {
 		else if (selectMode) {
 			toggleTargetSelection(cardIndex)
 		}
-    else if (!card.isRevealed) {	
-      revealCard(cardIndex);
-    }
+		else if (!card.isRevealed) {
+			revealCard(cardIndex);
+		}
 		else {
 			startSelectMode(cardIndex, card.usage)
 		}
-};
+	};
 
+	// For css-styling
+	const getHeartLevel = () => {
+		if (currentHealth <= 2) return "level-1";
+		if (currentHealth <= 5) return "level-2";
+		if (currentHealth < 8) return "level-3";
+		return "level-4";
+	};
 
 	return (
 		<div>
 			<div style={{ padding: 20 }}>
-				<h1>Game Deck</h1>
-				<p>Health: {currentHealth}/{maxHealth}</p>
+				<div>
+					<button onClick={quit} className='backButton'></button>
+					<h1>Level {level}</h1>
+				</div>
+				<div
+					className={`heart ${getHeartLevel()}`}
+				>
+					<div className='heart-text'>Health: {currentHealth}/{maxHealth}</div>
+				</div>
 				<p>Evils executed: {evilsExecuted}/{evilCount}</p>
-				{!deckCreated ? (
-					<button onClick={createDeck}>Create Deck</button>
-				) : (
-					<div>
-						<p>Deck created with {currentDeck.length} cards</p>
-					</div>
-				)}
 
 				{selectMode && (
 					<div style={{ marginTop: "10px", color: "blue" }}>
@@ -194,9 +214,9 @@ const handleCardClick = (cardIndex: number) => {
 						</button>
 					</div>
 				)}
-				
+
 				<div>
-					<button onClick={() => {setExecutionMode(!executionMode); setSelectMode(false)}} >Execute</button>
+					<button className='executeButton' onClick={() => { setExecutionMode(!executionMode); setSelectMode(false) }} >Execute <FontAwesomeIcon icon={faSkull} /></button>
 					{executionMode && (
 						<div style={{ marginTop: "10px", color: "blue" }}>
 							Selecting target to execute
@@ -241,8 +261,8 @@ const handleCardClick = (cardIndex: number) => {
 								y={y}
 								usageResult={card.usageResult}
 								isSelected={selectedCards.includes(card.positionIndex)}
-								isExecuted={executedCards.includes(card.positionIndex)} 								/>
-		
+								isExecuted={executedCards.includes(card.positionIndex)} />
+
 						</div>
 					);
 				})}
