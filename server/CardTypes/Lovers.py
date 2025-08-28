@@ -29,3 +29,5 @@ class Lovers(Card):
             else:
                 return "There is 1 evil(s) next to me"
 
+    def getDescription(self):
+        return "Learn how many Evil characters I am adjacent to"

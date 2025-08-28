@@ -4,6 +4,7 @@ import Card from './Card';
 import '../styles/deck.css'
 import { faSkull } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import CardOverview from './CardOverview';
 
 
 type CardType = {
@@ -14,7 +15,13 @@ type CardType = {
 	usageResult: string | null,
 	isRevealed: boolean,
 	isEvil: boolean,
-	executeEffect: number
+	executeEffect: number,
+}
+
+type CardInfo = {
+	cardName: string,
+	cardDescription: string,
+	cardHint: string,
 }
 
 interface Props {
@@ -31,7 +38,8 @@ const Deck = ({ level, quit }: Props) => {
 	const [evilsExecuted, setEvilsExecuted] = useState<number>(0);
 
 	const [currentDeck, setCurrentDeck] = useState<CardType[]>([]);
-	const [deckCreated, setDeckCreated] = useState<boolean>(false);
+	const [allPresentGoodCards, setAllPresentGoodCards] = useState<CardInfo[]>([]);
+	const [allPresentEvilCards, setAllPresentEvilCards] = useState<CardInfo[]>([]);
 	const [error, setError] = useState<any>(null);
 
 	// Selection mode state
@@ -50,15 +58,16 @@ const Deck = ({ level, quit }: Props) => {
 	}, [])
 
 	async function createDeck() {
-		setError(null);
-		setDeckCreated(true);
+
 		try {
 			const res = await fetch(`http://localhost:8000/create-deck/${level}`, { method: 'POST' });
 			const data = await res.json();
-			console.log(data.deck)
+			console.log(data)
 			if (res.ok) {
 				setCurrentDeck(data.deck);
-				setEvilCount(data.evilCount)
+				setAllPresentGoodCards(data.allPresentGoodCards);
+				setAllPresentEvilCards(data.allPresentEvilCards);
+				setEvilCount(data.evilCount);
 			} else {
 				setError(data.error || 'Failed to create deck');
 			}
@@ -190,6 +199,7 @@ const Deck = ({ level, quit }: Props) => {
 				<div>
 					<button onClick={quit} className='backButton'></button>
 					<h1>Level {level}</h1>
+					<div><CardOverview allPresentCards={[...allPresentGoodCards, ...allPresentEvilCards]} /></div>
 				</div>
 				<div
 					className={`heart ${getHeartLevel()}`}

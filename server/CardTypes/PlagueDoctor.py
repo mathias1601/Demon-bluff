@@ -70,3 +70,9 @@ class PlaugeDoctor(Card):
         
     def getUsage(self):
         return 1
+    
+    def getDescription(self):
+        return "Game Start:\n" \
+        "1 Good Villager is Corrupted\n" \
+        "Pick 1 character:\n" \
+        "If its Corrupted, learn an Evil character"

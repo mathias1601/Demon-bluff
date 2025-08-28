@@ -64,4 +64,7 @@ class Scout(Card):
 
             return f"{self.deck[randomEvilIndex].getEvilName()} is {random_distance} cards away from closest evil"
 
-            
+    
+    def getDescription(self):
+        return "Learn how far a specific Evil is to another closest Evil"
+    

@@ -25,3 +25,7 @@ class FortuneTeller(Card):
             
     def getUsage(self):
         return 2
+    
+    def getDescription(self):
+        return "Pick 2 characters:\n" \
+        "Learn if any of them are Evil"

@@ -16,3 +16,11 @@ class Confessor(Card):
             return "I am dizzy"
         else:
             return "I am good"
+        
+    def getDescription(self):
+        return "If I am Evil or Corrupted: \"I am dizzy\"  "
+    
+    def getHint(self):
+        return "I can not Lie"
+    
+    

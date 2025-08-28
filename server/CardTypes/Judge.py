@@ -24,4 +24,9 @@ class Judge(Card):
         
     def getUsage(self):
         return 1
+    
+
+    def getDescription(self):
+        return "Pick 1 character:\n" \
+        "Learn if they are Lying"
         

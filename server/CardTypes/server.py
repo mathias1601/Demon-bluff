@@ -23,7 +23,6 @@ app.add_middleware(
 
 @app.post("/create-deck/{index}")
 def create_preset_deck(index: int):
-
     global active_deck
 
     if index > len(all_preset_decks):
@@ -32,34 +31,61 @@ def create_preset_deck(index: int):
             detail=f"Index {index} is too large. Maximum allowed index is {len(all_preset_decks)}."
         )
 
-
     active_deck = all_preset_decks[index]
 
     evilCount = 0
 
-    """ Activate all start of game effects and count total evils """
+    """ All cards that are present in the deck or can be present """
+    allPresentCards = []
 
+    """ Activate all start of game effects and count total evils """
     for card in active_deck:
         card.gameStart()
         if card.isEvil():
             evilCount += 1
 
+    
+    allPresentGoodCards = []
+    for card in active_deck:
+        name = card.getName()
+        if name not in allPresentCards:
+            allPresentGoodCards.append({
+                "cardName": name,
+                "cardDescription": card.getDescription(),
+                "cardHint": card.getHint(),
+            })
+            allPresentCards.append(name)
+
+    
+    allPresentEvilCards = []
+    for card in active_deck:
+        name = card.getEvilName()
+        if card.isEvil() and name not in allPresentCards:
+            allPresentEvilCards.append({
+                "cardName": name,
+                "cardDescription": card.getEvilDescription(),
+                "cardHint": card.getEvilHint(),
+            })
+            allPresentCards.append(name)
+
     return { 
         "evilCount": evilCount,
+        "allPresentGoodCards": allPresentGoodCards,
+        "allPresentEvilCards": allPresentEvilCards,
         "deck": [
-        {
-            "positionIndex": card.getPositionIndex(),
-            "name": card.getName(),
-            "reveal": card.reveal(),
-            "usage": card.getUsage(),
-            "usageResult": None,
-            "isRevealed": False,
-            "isEvil": card.isEvil(),
-            "executeEffect": card.execute()
-        }
-        for card in active_deck
-    ]}
-
+            {
+                "positionIndex": card.getPositionIndex(),
+                "name": card.getName(),
+                "reveal": card.reveal(),
+                "usage": card.getUsage(),
+                "usageResult": None,
+                "isRevealed": False,
+                "isEvil": card.isEvil(),
+                "executeEffect": card.execute(),
+            }
+            for card in active_deck
+        ]
+    }
 
 class UseCardRequest(BaseModel):
     cardIndex: int

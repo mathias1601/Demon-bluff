@@ -51,3 +51,8 @@ class Empress(Card):
 
             return f"One is evil: #{randomChoice1}, #{randomChoice2} or #{randomChoice3}"
 
+    def getDescription(self):
+        return "Learn 3 characters. Only 1 is Evil"
+    
+    def getHint(self):
+        return "If Lies: All characters in my info are Good"

@@ -45,3 +45,8 @@ class Jester(Card):
         
     def getUsage(self):
         return 3
+    
+
+    def getDescription(self):
+        return "Pick 3 characters:\n" \
+        "Learn how many of them are Evil"

@@ -58,3 +58,6 @@ class Bard(Card):
                 random_distance = random.randint(1, largest_distance)
 
             return f"I am {random_distance} away from closest Corrupted"
+        
+    def getDescription(self):
+        return "Learn how far away I am from closest Corrupted character"

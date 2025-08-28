@@ -36,5 +36,11 @@ class Oracle(Card):
             currentGood.remove(randomGoodIndex)
             randomGoodIndex2 = random.choice(currentGood)
             return f"#{randomGoodIndex} or #{randomGoodIndex2} is a {self.deck[randomEvilIndex].getEvilName()}"
+        
+    def getDescription(self):
+        return "Learn that 1 out of 2 characters is a specific Minion role"
+    
+    def getHint(self):
+        return "If Lies: Both characters in my info are Good"
             
         

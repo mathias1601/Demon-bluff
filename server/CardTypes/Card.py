@@ -44,6 +44,15 @@ class Card():
     def gameStart(self):
         return 
     
+    def getDescription(self):
+        return 
+    
+    def getHint(self):
+        return 
+    
+    def getEvilName(self):
+        return 
+    
         
         
 

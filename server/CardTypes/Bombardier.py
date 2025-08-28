@@ -14,3 +14,6 @@ class Bombardier(Card):
             return -10
         else:
             return -1 
+        
+    def getDescription(self):
+        return "Lose if you Execute me"

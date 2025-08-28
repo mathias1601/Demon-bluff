@@ -55,3 +55,6 @@ class Englightened(Card):
                 randomAnswer = random.choice(allAnswers)
                 return randomAnswer
 
+    def getDescription(self):
+        return "Learn if closest Evil to me is Clockwise or Counter-Clockwise\n" \
+        "Learn Equidistant if Evils are at the same distance from me."

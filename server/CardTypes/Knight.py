@@ -17,4 +17,6 @@ class Knight(Card):
             return -8
         else:
             return -1
-        
+    
+    def getDescription(self):
+        return "I can't die" 

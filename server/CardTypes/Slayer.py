@@ -25,3 +25,11 @@ class Slayer(Card):
         
     def getUsage(self):
         return 1
+    
+
+    def getDescription(self):
+        return "Pick 1 character:\n" \
+        "If evil picked, Execute it"
+    
+    def getHint(self):
+        return "If Lies: I can not kill my target"

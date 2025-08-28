@@ -30,4 +30,6 @@ class Gemcrafter(Card):
         
         return f"#{randomCard.getPositionIndex()}, {randomCard.getName()} is good"
     
+    def getDescription(self):
+        return "Learn 1 Good character"
             

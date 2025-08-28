@@ -36,4 +36,7 @@ class Knitter(Card):
             if amountOfPairs == 1:
                  return f"There is only {randomAmountPairs} pair of evil"
             return f"There are {randomAmountPairs} pairs of evil"
-            
+    
+
+    def getDescription(self):
+        return "Learn how many Evils are adjacent to each other"

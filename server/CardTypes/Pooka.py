@@ -9,3 +9,8 @@ class Pooka(Minion):
     def gameStart(self):
         self.disguise.deck[self.getPositionIndex() + 1].corrupted = True
         self.disguise.deck[self.getPositionIndex() - 1].corrupted = True
+
+    def getDescription(self):
+        return "Game Start:\n" \
+        "Villagers adjacent to me are Corrupted (if possible)\n" \
+        "I Lie and Disguise"

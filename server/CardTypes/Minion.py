@@ -37,3 +37,15 @@ class Minion(Card):
     
     def isCorrupted(self):
         return False
+    
+    def getDescription(self):
+        return self.disguise.getDescription()
+
+    def getEvilDescription(self):
+        return "I Lie and Disguise"
+
+    def getHint(self):
+        return self.disguise.getHint()
+    
+    def getEvilHint(self):
+        return 

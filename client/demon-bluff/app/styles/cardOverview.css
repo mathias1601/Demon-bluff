@@ -1,0 +1,15 @@
+.cardOverviewDisplay {
+    border-radius: 12px;
+    font-size: 18px;
+    font-weight: bold;
+    border: 2px solid #333;
+    background: white;
+    height: 220px;
+    width: 180px;
+    margin: 30px;
+    text-align: center;
+}
+
+.displayCardsContainer {
+    display: flex;
+}

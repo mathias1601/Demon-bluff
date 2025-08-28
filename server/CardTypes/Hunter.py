@@ -42,3 +42,5 @@ class Hunter(Card):
 
             return f"I am {random_distance} away from closest Evil"
 
+    def getDescription(self):
+        return "Learn how far I am from the nearest Evil"
