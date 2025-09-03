@@ -1,4 +1,4 @@
-from Card import Card
+from server.CardTypes.Card import Card
 
 class Minion(Card):
     """ The disguise parameter is meant to be a good villager class """

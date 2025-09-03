@@ -2,7 +2,7 @@ from typing import List
 from pydantic import BaseModel
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
-from preset_decks import all_preset_decks
+from server.preset_decks import all_preset_decks
 
 
 app = FastAPI()
@@ -12,6 +12,7 @@ active_deck = None
 origins = [
     "http://localhost:3000", 
 ]
+
 
 app.add_middleware(
     CORSMiddleware,

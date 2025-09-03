@@ -1,7 +1,7 @@
-from Card import Card
+from server.CardTypes.Card import Card
 import random
 
-class PlaugeDoctor(Card):
+class PlagueDoctor(Card):
 
     def __init__(self, positionIndex, deck, isVillager, isCorrupted, isMinion, isDemon):
         self.name = "Plague Doctor"

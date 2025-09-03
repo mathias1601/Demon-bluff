@@ -1,4 +1,4 @@
-from Card import Card
+from server.CardTypes.Card import Card
 import random
 
 class Scout(Card):

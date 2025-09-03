@@ -5,6 +5,7 @@ import '../styles/deck.css'
 import { faSkull } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import CardOverview from './CardOverview';
+import ScreenOverlay from './ScreenOverlay';
 
 
 type CardType = {
@@ -38,6 +39,7 @@ const Deck = ({ level, quit }: Props) => {
 	const [evilsExecuted, setEvilsExecuted] = useState<number>(0);
 
 	const [currentDeck, setCurrentDeck] = useState<CardType[]>([]);
+	const [deckCreated, setDeckCreated] = useState<boolean>(false);
 	const [allPresentGoodCards, setAllPresentGoodCards] = useState<CardInfo[]>([]);
 	const [allPresentEvilCards, setAllPresentEvilCards] = useState<CardInfo[]>([]);
 	const [error, setError] = useState<any>(null);
@@ -52,6 +54,12 @@ const Deck = ({ level, quit }: Props) => {
 	const [executionMode, setExecutionMode] = useState<boolean>(false);
 	const [executedCards, setExecutedCards] = useState<number[]>([]);
 
+	// Check if game has finished
+	const [gameWon, setGameWon] = useState<boolean>(false);
+	const [gameLost, setGameLost] = useState<boolean>(false);
+
+	// Monitor overlays
+	const [isEndingScreenOverlayOpen, setIsEndingScreenOverlayOpen] = useState<boolean>(false);
 
 	useEffect(() => {
 		createDeck()
@@ -68,6 +76,7 @@ const Deck = ({ level, quit }: Props) => {
 				setAllPresentGoodCards(data.allPresentGoodCards);
 				setAllPresentEvilCards(data.allPresentEvilCards);
 				setEvilCount(data.evilCount);
+				setDeckCreated(true);
 			} else {
 				setError(data.error || 'Failed to create deck');
 			}
@@ -75,6 +84,21 @@ const Deck = ({ level, quit }: Props) => {
 			setError('Network error');
 		}
 	}
+
+	useEffect(() => {
+		if (!deckCreated) {
+			return 
+		}
+
+		if (evilsExecuted >= evilCount) {
+			setGameWon(true)
+			setIsEndingScreenOverlayOpen(true)
+		}
+		else if (currentHealth <= 0) {
+			setGameLost(true)
+			setIsEndingScreenOverlayOpen(true)
+		}
+	}, [evilsExecuted, currentHealth])
 
 	const revealCard = (index: number) => {
 
@@ -193,6 +217,17 @@ const Deck = ({ level, quit }: Props) => {
 		return "level-4";
 	};
 
+	const resetGame = () => {
+		setCurrentHealth(maxHealth)
+		setEvilsExecuted(0)
+		setDeckCreated(false)
+		createDeck()
+		setIsEndingScreenOverlayOpen(false)
+		setGameWon(false)
+		setGameLost(false)
+		setExecutedCards([])
+	}
+
 	return (
 		<div>
 			<div style={{ padding: 20 }}>
@@ -271,12 +306,18 @@ const Deck = ({ level, quit }: Props) => {
 								y={y}
 								usageResult={card.usageResult}
 								isSelected={selectedCards.includes(card.positionIndex)}
-								isExecuted={executedCards.includes(card.positionIndex)} />
+								isExecuted={executedCards.includes(card.positionIndex)} 
+								isEvil={card.isEvil}
+							/>
 
 						</div>
 					);
 				})}
 			</div>
+
+			<ScreenOverlay win={gameWon} isOpen={isEndingScreenOverlayOpen} onClose={() => setIsEndingScreenOverlayOpen(false)}>
+				<button onClick={() => resetGame()}>Try again</button>
+			</ScreenOverlay>
 		</div>
 	);
 }

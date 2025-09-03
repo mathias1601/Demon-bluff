@@ -1,4 +1,4 @@
-from Minion import Minion
+from server.CardTypes.Minion import Minion
 
 class Pooka(Minion):
     """ The disguise parameter is meant to be a good villager class """
@@ -10,7 +10,7 @@ class Pooka(Minion):
         self.disguise.deck[self.getPositionIndex() + 1].corrupted = True
         self.disguise.deck[self.getPositionIndex() - 1].corrupted = True
 
-    def getDescription(self):
+    def getEvilDescription(self):
         return "Game Start:\n" \
         "Villagers adjacent to me are Corrupted (if possible)\n" \
         "I Lie and Disguise"

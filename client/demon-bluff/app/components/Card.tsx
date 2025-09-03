@@ -13,9 +13,18 @@ interface Props {
 	y: number,
 	isSelected: boolean,
 	isExecuted: boolean,
+	isEvil: boolean,
 }
 
-const Card = ({ positionIndex, name, reveal, usage, usageResult, isRevealed, x, y, isSelected, isExecuted }: Props) => {
+
+
+const Card = ({ positionIndex, name, reveal, usage, usageResult, isRevealed, x, y, isSelected, isExecuted, isEvil }: Props) => {
+
+	// For css-styling
+	const getExecutedEffect = () => {
+		if (isEvil) return "green";
+		return "red";
+	};
 	
 	return (
 		<div>
@@ -32,7 +41,7 @@ const Card = ({ positionIndex, name, reveal, usage, usageResult, isRevealed, x, 
 				<div 
 					style={{
 						border: isSelected ? "3px solid red" : "2px solid #333",
-						background: isExecuted ? "red" : "#444"
+						background: isExecuted ? getExecutedEffect() : "#444"
 					}} 
 					className="card-front"
 				>
@@ -42,7 +51,7 @@ const Card = ({ positionIndex, name, reveal, usage, usageResult, isRevealed, x, 
 					style={
 						{
 							border: isSelected ? "3px solid red" : "2px solid #333",
-							background: isExecuted ? "red" : "#fafafa",
+							background: isExecuted ? getExecutedEffect() : "#fafafa",
 						}} 
 					className="card-back"
 				>

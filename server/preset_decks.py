@@ -1,18 +1,18 @@
-from FortuneTeller import FortuneTeller
-from Confessor import Confessor
-from Knight import Knight
-from Gemcrafter import Gemcrafter
-from Bombardier import Bombardier
-from Scout import Scout
-from Oracle import Oracle
-from Hunter import Hunter
-from Judge import Judge
-from Jester import Jester
-from Knitter import Knitter
-from Pooka import Pooka
-from Bard import Bard
-from PlagueDoctor import PlaugeDoctor
-from Minion import Minion
+from server.CardTypes.FortuneTeller import FortuneTeller
+from server.CardTypes.Confessor import Confessor
+from server.CardTypes.Knight import Knight
+from server.CardTypes.Gemcrafter import Gemcrafter
+from server.CardTypes.Bombardier import Bombardier
+from server.CardTypes.Scout import Scout
+from server.CardTypes.Oracle import Oracle
+from server.CardTypes.Hunter import Hunter
+from server.CardTypes.Judge import Judge
+from server.CardTypes.Jester import Jester
+from server.CardTypes.Knitter import Knitter
+from server.CardTypes.Pooka import Pooka
+from server.CardTypes.Bard import Bard
+from server.CardTypes.PlagueDoctor import PlagueDoctor
+from server.CardTypes.Minion import Minion
 
 all_preset_decks = [
     
@@ -28,7 +28,7 @@ preset_deck1 = [
     Oracle(2, None, True, False, False, False),
     Jester(3, None, True, False, False, False),
     Scout(4, None, True, False, False, False),
-    PlaugeDoctor(5, None, True, False, False, False),
+    PlagueDoctor(5, None, True, False, False, False),
     Minion(evil2),
 ]
 
@@ -46,7 +46,7 @@ evil1 = Bombardier(1, None, False, False, False, True)
 evil2 = Judge(6, None, False, False, False, True)
     
 preset_deck2 = [
-    PlaugeDoctor(0, None, True, False, False, False),
+    PlagueDoctor(0, None, True, False, False, False),
     Minion(evil1),
     Gemcrafter(2, None, True, False, False, False),
     Jester(3, None, True, False, False, False),
