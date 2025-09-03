@@ -1,3 +1,4 @@
+from copy import deepcopy
 from typing import List
 from pydantic import BaseModel
 from fastapi import FastAPI, HTTPException
@@ -32,7 +33,8 @@ def create_preset_deck(index: int):
             detail=f"Index {index} is too large. Maximum allowed index is {len(all_preset_decks)}."
         )
 
-    active_deck = all_preset_decks[index]
+    # deepcopy() so that all python objects are new and clean
+    active_deck = deepcopy(all_preset_decks[index])
 
     evilCount = 0
 
@@ -83,6 +85,7 @@ def create_preset_deck(index: int):
                 "isRevealed": False,
                 "isEvil": card.isEvil(),
                 "executeEffect": card.execute(),
+                "isCorrupted": card.isCorrupted(),
             }
             for card in active_deck
         ]

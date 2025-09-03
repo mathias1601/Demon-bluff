@@ -84,7 +84,7 @@ const Deck = ({ level, quit }: Props) => {
 			setError('Network error');
 		}
 	}
-
+	
 	useEffect(() => {
 		if (!deckCreated) {
 			return 
@@ -116,11 +116,6 @@ const Deck = ({ level, quit }: Props) => {
 			setActionCardIndex(cardIndex);
 			setRequiredSelections(usage);
 			setSelectedCards([]);
-			setCurrentDeck(prevDeck =>
-				prevDeck.map((card, i) =>
-					i === cardIndex ? { ...card, usage: 0 } : card
-				)
-			);
 		}
 	};
 
@@ -183,7 +178,7 @@ const Deck = ({ level, quit }: Props) => {
 		const data = await res.json();
 		setCurrentDeck(prevDeck =>
 			prevDeck.map((card, i) =>
-				i === cardIndex ? { ...card, usageResult: data.usageResult } : card
+				i === cardIndex ? { ...card, usage: 0, usageResult: data.usageResult } : card
 			)
 		);
 

@@ -8,7 +8,7 @@ interface Props {
 	children: any
 }
 
-const EndingScreenOverlay = ({ win, isOpen, onClose, children }: Props) => {
+const ScreenOverlay = ({ win, isOpen, onClose, children }: Props) => {
 
 	return (
 		<>
@@ -40,4 +40,4 @@ const EndingScreenOverlay = ({ win, isOpen, onClose, children }: Props) => {
 	)
 }
 
-export default EndingScreenOverlay
+export default ScreenOverlay
